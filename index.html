@@ -1,0 +1,517 @@
+<title>AI活用アンケート</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&family=Kiwi+Maru&family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<style>
+  /* 白い画面を基本に、色は装飾とグラフだけに使う(ライト固定のデザイン) */
+  :root {
+    --bg: #FFFFFF;
+    --ink: #3F4237;
+    --muted: #7A7D70;
+    --line: #E3E6DA;
+    --soft: #F6F8F1;
+    --mint: #C6E2B3;
+    --mint-ink: #34462A;
+    --yellow: #F4EFA6;
+    --aqua: #B3DDE0;
+    --cream: #EEEBD2;
+    --danger: #A3564A;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    padding-inline: 16px;
+    padding-block: 0;
+  }
+  .wrap { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; padding-block: 8px 40px; }
+
+  /* 上下の波の帯 */
+  .wave { display: block; width: calc(100% + 32px); margin-inline: -16px; height: 56px; }
+  .wave-bottom { height: 64px; }
+
+  /* 葉っぱとキラキラ */
+  .deco { position: absolute; pointer-events: none; }
+  .twinkle { animation: twinkle 3.2s ease-in-out infinite; }
+  @keyframes twinkle { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .45; transform: scale(.8); } }
+  fieldset + fieldset::before, fieldset + .skip-note + fieldset::before {
+    content: ""; position: absolute; top: -7px; left: 50%; width: 14px; height: 14px; margin-left: -7px;
+    background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2 13.8 10.2 22 12 13.8 13.8 12 22 10.2 13.8 2 12 10.2 10.2Z' fill='%23CDE9EB'/%3E%3C/svg%3E") center / 12px no-repeat;
+    box-shadow: 0 0 0 4px var(--bg);
+  }
+  fieldset:nth-of-type(even)::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 20C4 10 10 4 20 4 20 14 14 20 4 20Z' fill='%23C6E2B3'/%3E%3C/svg%3E");
+  }
+
+  header { position: relative; display: flex; align-items: flex-end; gap: 12px; }
+  .head-text { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .eyebrow { font-size: 12px; letter-spacing: .1em; color: var(--muted); }
+  h1 {
+    font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
+    font-weight: 700; font-size: 24px; line-height: 1.6; margin: 0; text-wrap: balance;
+  }
+  h1 .mark { background: linear-gradient(transparent 62%, var(--yellow) 62%); }
+  .lead { margin: 0; color: var(--muted); font-size: 13px; }
+  .rin-head { width: 92px; flex-shrink: 0; }
+
+  .tabs { display: flex; gap: 4px; background: var(--soft); padding: 4px; border-radius: 999px; }
+  .tabs button {
+    flex: 1; border: 0; background: transparent; color: var(--muted);
+    font: inherit; font-size: 14px; font-weight: 500; padding: 8px 12px; border-radius: 999px; cursor: pointer;
+  }
+  .tabs button[aria-selected="true"] { background: var(--bg); color: var(--ink); box-shadow: 0 0 0 1px var(--line); }
+  .tabs button:focus-visible { outline: 2px solid var(--aqua); outline-offset: 2px; }
+
+  /* 進み具合のバーと、走るりんちゃん */
+  .progress {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 2;
+    background: var(--bg); padding-block: 30px 10px; margin-block: -6px 4px;
+  }
+  .track { position: relative; height: 8px; border-radius: 999px; background: var(--soft); }
+  .track .done { height: 100%; width: 0; border-radius: 999px; background: var(--mint); transition: width .5s ease; }
+  .rin-run {
+    position: absolute; bottom: 2px; left: 0; width: 44px; transform: translateX(-50%);
+    transition: left .5s ease;
+  }
+  .rin-run.hop { animation: hop .5s ease; }
+  @keyframes hop { 0%,100% { translate: 0 0; } 40% { translate: 0 -8px; } }
+  .progress-label { font-size: 12px; color: var(--muted); text-align: right; margin-top: 6px; font-variant-numeric: tabular-nums; }
+
+  form { display: flex; flex-direction: column; }
+  fieldset {
+    position: relative;
+    border: 0; margin: 0; padding: 22px 0; border-top: 1px solid var(--line);
+    display: flex; flex-direction: column; gap: 12px; min-width: 0;
+  }
+  fieldset:first-of-type { border-top: 0; padding-top: 4px; }
+  legend { padding: 0; display: contents; }
+  .q {
+    font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
+    font-weight: 700; font-size: 17px; line-height: 1.6; display: flex; gap: 10px; align-items: baseline;
+  }
+  .q .n {
+    flex-shrink: 0; font-size: 12px; font-weight: 700; color: var(--mint-ink);
+    background: var(--mint); border-radius: 999px; padding: 0 9px; line-height: 1.9; font-variant-numeric: tabular-nums;
+  }
+  .hint { font-size: 12px; color: var(--muted); margin-top: -6px; }
+
+  .choices { display: flex; flex-wrap: wrap; gap: 8px; }
+  .choice { position: relative; }
+  .choice input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+  .choice span {
+    display: inline-block; padding: 9px 16px; border: 1px solid var(--line); border-radius: 999px;
+    background: var(--bg); font-size: 14px; line-height: 1.5; transition: background .15s, border-color .15s;
+  }
+  .choice input:checked + span { background: var(--mint); border-color: var(--mint); color: var(--mint-ink); font-weight: 500; }
+  .choice input:focus-visible + span { outline: 2px solid var(--aqua); outline-offset: 2px; }
+
+  .skip-note {
+    display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--ink);
+    background: var(--soft); padding: 10px 14px; border-radius: 14px; margin: 0 0 8px;
+  }
+  .skip-note img { width: 64px; flex-shrink: 0; }
+  .skip-note:not([hidden]) { animation: pop .45s ease; }
+  @keyframes pop { from { opacity: 0; transform: translateY(6px) scale(.97); } to { opacity: 1; transform: none; } }
+
+  .submit-row { display: flex; flex-direction: column; gap: 10px; padding-top: 8px; }
+  .btn {
+    border: 0; border-radius: 999px; padding: 14px 20px; cursor: pointer;
+    background: var(--mint); color: var(--mint-ink); font: inherit; font-weight: 700; font-size: 15px;
+  }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .btn:focus-visible { outline: 2px solid var(--aqua); outline-offset: 2px; }
+  .btn.ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+  .err { color: var(--danger); font-size: 13px; margin: 0; }
+
+  /* 送信ボタンの下のしめくくり */
+  .closing { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 36px; text-align: center; }
+  .closing .rin-box { position: relative; margin-top: 8px; }
+  .closing .rin-box img { width: 120px; display: block; }
+  .bubble {
+    position: absolute; top: 4px; left: 100%; margin-left: -10px; white-space: nowrap;
+    background: #FBF9DA; color: var(--ink); font-family: "Kiwi Maru", "Zen Maru Gothic", sans-serif; font-size: 12px; font-weight: 400;
+    padding: 3px 12px; border-radius: 999px; transform-origin: 0 100%;
+    animation: wiggle 2s ease-in-out infinite;
+  }
+  .bubble::after {
+    content: ""; position: absolute; left: 8px; bottom: -5px;
+    border: 6px solid transparent; border-top-color: #FBF9DA; border-bottom: 0; transform: skewX(20deg);
+  }
+  @keyframes wiggle { 0%,100% { rotate: -2deg; } 50% { rotate: 2deg; } }
+
+  .thanks { display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center; padding-top: 8px; }
+  .thanks img { width: 150px; animation: bounce 1.2s ease 1; }
+  @keyframes bounce { 0% { transform: translateY(12px); opacity: 0; } 40% { transform: translateY(-10px); opacity: 1; } 70% { transform: translateY(2px); } 100% { transform: none; } }
+  .thanks h2 { font-family: "Zen Maru Gothic", sans-serif; font-size: 21px; margin: 0; }
+  .reveal { background: var(--soft); border-radius: 14px; padding: 14px 18px; font-size: 14px; margin: 0; text-align: left; }
+  .reveal b { background: linear-gradient(transparent 60%, var(--yellow) 60%); font-weight: 700; }
+  .thanks .btn { align-self: stretch; }
+
+  .results { display: flex; flex-direction: column; gap: 30px; }
+  .count { font-size: 14px; color: var(--muted); }
+  .count b { font-size: 28px; color: var(--ink); font-family: "Zen Maru Gothic", sans-serif; margin-right: 4px; font-variant-numeric: tabular-nums; }
+  .rq { display: flex; flex-direction: column; gap: 10px; }
+  .rq h3 { margin: 0; font-family: "Zen Maru Gothic", sans-serif; font-size: 15px; line-height: 1.6; }
+  .rq .sub { font-size: 12px; color: var(--muted); font-weight: 400; margin-left: 6px; font-family: "Noto Sans JP", sans-serif; }
+
+  /* 帯グラフ */
+  .band { display: flex; height: 18px; border-radius: 999px; overflow: hidden; background: var(--soft); }
+  .band span { height: 100%; transition: width .5s ease; }
+  .band span + span { box-shadow: -2px 0 0 var(--bg); }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 0; padding: 0; list-style: none; font-size: 13px; }
+  .legend li { display: flex; align-items: center; gap: 6px; }
+  .legend i { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .legend .pct { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  /* 人気順の横棒(複数回答) */
+  .rank { display: grid; grid-template-columns: minmax(0, 10em) 1fr 4.2em; gap: 8px 10px; align-items: center; font-size: 13px; }
+  .rank .label { line-height: 1.4; overflow-wrap: anywhere; }
+  .rank .track2 { height: 12px; background: var(--soft); border-radius: 999px; overflow: hidden; }
+  .rank .fill { height: 100%; background: var(--mint); border-radius: 999px; transition: width .5s ease; }
+  .rank .num { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  .empty { display: flex; flex-direction: column; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; text-align: center; padding-block: 12px; }
+  .empty img { width: 150px; }
+
+  @media (max-width: 420px) {
+    h1 { font-size: 21px; }
+    .rin-head { width: 76px; }
+    .rank { grid-template-columns: 1fr 4.2em; }
+    .rank .label { grid-column: 1 / -1; margin-bottom: -4px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+
+<svg class="wave" viewBox="0 0 400 56" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0 0H400V26C360 44 320 14 270 26S180 46 130 30 40 14 0 30Z" fill="#DAECCE"/>
+  <path d="M0 0H400V12C350 28 300 2 250 14S160 30 110 16 30 4 0 14Z" fill="#CDE9EB"/>
+</svg>
+
+<div class="wrap">
+  <header>
+    <svg class="deco" width="26" height="26" viewBox="0 0 24 24" style="right: 96px; top: -2px; transform: rotate(-20deg)" aria-hidden="true"><path d="M4 20C4 10 10 4 20 4 20 14 14 20 4 20Z" fill="#C6E2B3"/><path d="M5 19 15 9" stroke="#A9CF92" stroke-width="1.2"/></svg>
+    <svg class="deco twinkle" width="14" height="14" viewBox="0 0 24 24" style="right: 128px; top: 26px" aria-hidden="true"><path d="M12 0 14.5 9.5 24 12 14.5 14.5 12 24 9.5 14.5 0 12 9.5 9.5Z" fill="#F4EFA6"/></svg>
+    <svg class="deco twinkle" width="11" height="11" viewBox="0 0 24 24" style="right: 4px; top: 4px; animation-delay: 1.4s" aria-hidden="true"><path d="M12 0 14.5 9.5 24 12 14.5 14.5 12 24 9.5 14.5 0 12 9.5 9.5Z" fill="#B3DDE0"/></svg>
+    <div class="head-text">
+      <div class="eyebrow">ハンドメイド作家さんのための AI講座</div>
+      <h1><span class="mark">はじめに、ちょっとだけ</span><br>教えてください♪</h1>
+      <p class="lead">タップするだけで1分ほどで終わります。お名前は聞きません。</p>
+    </div>
+    <img class="rin-head" src="rin_smile.gif" alt="にっこり笑うりんちゃん">
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button type="button" role="tab" id="tab-form" aria-selected="true">回答する</button>
+    <button type="button" role="tab" id="tab-results" aria-selected="false">みんなの結果</button>
+  </div>
+
+  <section id="view-form">
+    <div class="progress" id="progress">
+      <div class="track">
+        <div class="done" id="done"></div>
+        <img class="rin-run" id="rin-run" src="rin_run.png" alt="">
+      </div>
+      <div class="progress-label" id="progress-label">0 / 6</div>
+    </div>
+
+    <form id="survey" novalidate>
+      <fieldset data-q="used">
+        <legend><div class="q"><span class="n">Q1</span>AIを使ったことがありますか?</div></legend>
+        <div class="choices" data-type="radio" data-name="used"></div>
+      </fieldset>
+
+      <p class="skip-note" id="skip-note" hidden>
+        <img src="rin_question.gif" alt="首をかしげるりんちゃん">
+        <span>「まだない」を選んだ方は、Q6だけ答えてくださいね。</span>
+      </p>
+
+      <fieldset data-q="tools" class="needs-ai">
+        <legend><div class="q"><span class="n">Q2</span>どのAIを使っていますか?</div></legend>
+        <div class="hint">いくつでも選べます</div>
+        <div class="choices" data-type="checkbox" data-name="tools"></div>
+      </fieldset>
+
+      <fieldset data-q="purposes" class="needs-ai">
+        <legend><div class="q"><span class="n">Q3</span>何のために使っていますか?</div></legend>
+        <div class="hint">いくつでも選べます</div>
+        <div class="choices" data-type="checkbox" data-name="purposes"></div>
+      </fieldset>
+
+      <fieldset data-q="freq" class="needs-ai">
+        <legend><div class="q"><span class="n">Q4</span>使う頻度は?</div></legend>
+        <div class="choices" data-type="radio" data-name="freq"></div>
+      </fieldset>
+
+      <fieldset data-q="paid" class="needs-ai">
+        <legend><div class="q"><span class="n">Q5</span>課金していますか?</div></legend>
+        <div class="choices" data-type="radio" data-name="paid"></div>
+      </fieldset>
+
+      <fieldset data-q="learn">
+        <legend><div class="q"><span class="n">Q6</span>今後、積極的にAIを学びたいですか?</div></legend>
+        <div class="choices" data-type="radio" data-name="learn"></div>
+      </fieldset>
+
+      <div class="submit-row">
+        <p class="err" id="form-err" hidden></p>
+        <button class="btn" type="submit" id="submit">送信する</button>
+      </div>
+
+      <div class="closing">
+        <svg class="deco twinkle" width="14" height="14" viewBox="0 0 24 24" style="left: 22%; top: 20px" aria-hidden="true"><path d="M12 0 14.5 9.5 24 12 14.5 14.5 12 24 9.5 14.5 0 12 9.5 9.5Z" fill="#B3DDE0"/></svg>
+        <svg class="deco" width="22" height="22" viewBox="0 0 24 24" style="right: 20%; top: 14px; transform: rotate(30deg)" aria-hidden="true"><path d="M4 20C4 10 10 4 20 4 20 14 14 20 4 20Z" fill="#DAECCE"/></svg>
+        <div class="rin-box">
+          <img src="rin_back.png" alt="うしろを向いてしっぽを振るりんちゃん">
+          <span class="bubble">わくわく♡</span>
+        </div>
+      </div>
+    </form>
+
+    <div class="thanks" id="thanks" hidden>
+      <img src="rin_heart.png" alt="ハートを抱えたりんちゃん">
+      <h2>ご回答ありがとうございました♡</h2>
+      <p class="reveal">実はこのアンケート、<b>AIにお願いして作りました。</b><br>質問内容とデザインを伝えただけで、この画面もみんなの結果のグラフも出来上がります。</p>
+      <button class="btn" type="button" id="see-results">みんなの結果を見る</button>
+      <button class="btn ghost" type="button" id="again">もう一度回答する</button>
+    </div>
+  </section>
+
+  <section id="view-results" hidden>
+    <div class="results" id="results"></div>
+  </section>
+</div>
+
+<svg class="wave wave-bottom" viewBox="0 0 400 64" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0 64H400V30C350 14 310 44 260 32S170 10 120 26 40 44 0 28Z" fill="#F4EFA6"/>
+  <path d="M0 64H400V46C360 34 320 58 270 48S180 30 130 44 40 56 0 46Z" fill="#DAECCE"/>
+</svg>
+
+<script>
+  const QUESTIONS = {
+    used:     { title: "AIを使ったことがありますか?", options: ["はい", "少しだけ", "まだない"] },
+    tools:    { title: "どのAIを使っていますか?", multi: true, options: ["ChatGPT", "Gemini", "Claude", "Grok", "Canva AI", "その他"] },
+    purposes: { title: "何のために使っていますか?", multi: true, options: ["文章づくり", "画像生成", "壁打ち・アイデア出し", "相談ごと", "調べもの", "事務作業", "その他"] },
+    freq:     { title: "使う頻度は?", options: ["ほぼ毎日", "週に数回", "月に数回", "ほとんど使わない"] },
+    paid:     { title: "課金していますか?", options: ["している", "していない", "検討中"] },
+    learn:    { title: "今後、積極的にAIを学びたいですか?", options: ["ぜひ学びたい", "少し興味がある", "興味はあまりないけど、学ばなきゃと思っている", "まだわからない"] },
+  };
+  const AI_QS = ["tools", "purposes", "freq", "paid"];
+  const BAND_COLORS = ["var(--mint)", "var(--yellow)", "var(--aqua)", "var(--cream)"];
+
+  // 選択肢を描画
+  document.querySelectorAll(".choices").forEach(box => {
+    const name = box.dataset.name, type = box.dataset.type;
+    QUESTIONS[name].options.forEach((opt, i) => {
+      const id = `${name}-${i}`;
+      const label = document.createElement("label");
+      label.className = "choice";
+      label.htmlFor = id;
+      const input = document.createElement("input");
+      input.type = type; input.name = name; input.value = opt; input.id = id;
+      const span = document.createElement("span");
+      span.textContent = opt;
+      label.append(input, span);
+      box.append(label);
+    });
+  });
+
+  const form = document.getElementById("survey");
+  const err = document.getElementById("form-err");
+  const submitBtn = document.getElementById("submit");
+
+  function noAI() {
+    return form.querySelector('input[name="used"]:checked')?.value === "まだない";
+  }
+  function activeQs() {
+    return Object.keys(QUESTIONS).filter(n => !(noAI() && AI_QS.includes(n)));
+  }
+  function syncSkip() {
+    const skip = noAI();
+    document.querySelectorAll(".needs-ai").forEach(fs => fs.hidden = skip);
+    document.getElementById("skip-note").hidden = !skip;
+  }
+
+  // 進み具合:答えるたびにりんちゃんが前に進む
+  const rinRun = document.getElementById("rin-run");
+  let lastDone = 0;
+  function syncProgress() {
+    const qs = activeQs();
+    const done = qs.filter(n => form.querySelector(`input[name="${n}"]:checked`)).length;
+    const pct = qs.length ? done / qs.length * 100 : 0;
+    document.getElementById("done").style.width = pct + "%";
+    rinRun.style.left = `max(22px, min(calc(100% - 22px), ${pct}%))`;
+    document.getElementById("progress-label").textContent = `${done} / ${qs.length}`;
+    if (done > lastDone) {
+      rinRun.classList.remove("hop"); void rinRun.offsetWidth; rinRun.classList.add("hop");
+    }
+    lastDone = done;
+  }
+  syncProgress();
+
+  form.addEventListener("change", e => {
+    if (e.target.name === "used") syncSkip();
+    err.hidden = true;
+    syncProgress();
+  });
+
+  function collect() {
+    const ans = {};
+    for (const name of activeQs()) {
+      const checked = [...form.querySelectorAll(`input[name="${name}"]:checked`)].map(i => i.value);
+      if (!checked.length) return { missing: name };
+      ans[name] = QUESTIONS[name].multi ? checked : checked[0];
+    }
+    return { ans };
+  }
+
+  // タブ
+  const views = { form: document.getElementById("view-form"), results: document.getElementById("view-results") };
+  function show(which) {
+    views.form.hidden = which !== "form";
+    views.results.hidden = which !== "results";
+    document.getElementById("tab-form").setAttribute("aria-selected", which === "form");
+    document.getElementById("tab-results").setAttribute("aria-selected", which === "results");
+  }
+  document.getElementById("tab-form").onclick = () => show("form");
+  document.getElementById("tab-results").onclick = () => show("results");
+  document.getElementById("see-results").onclick = () => show("results");
+  document.getElementById("again").onclick = () => {
+    form.reset(); syncSkip(); lastDone = 0; syncProgress();
+    form.hidden = false; document.getElementById("progress").hidden = false;
+    document.getElementById("thanks").hidden = true;
+    window.scrollTo({ top: 0 });
+  };
+
+  // 結果の描画
+  let responses = [];
+  function el(tag, cls, text) {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+  function renderResults() {
+    const root = document.getElementById("results");
+    root.textContent = "";
+    const count = el("div", "count");
+    count.append(el("b", "", responses.length), "人が回答しました");
+    root.append(count);
+
+    if (!responses.length) {
+      const empty = el("div", "empty");
+      const img = el("img");
+      img.src = "rin_sleep.png";
+      img.alt = "すやすや眠るりんちゃん";
+      empty.append(img, el("span", "", "まだだれも来ていないみたい。"), el("span", "", "最初の1人になってみてください。"));
+      root.append(empty);
+      return;
+    }
+
+    for (const [name, q] of Object.entries(QUESTIONS)) {
+      const answered = responses.filter(r => r[name] !== undefined);
+      const tally = q.options.map(o => ({ opt: o, n: 0 }));
+      answered.forEach(r => [].concat(r[name]).forEach(v => { const t = tally.find(t => t.opt === v); if (t) t.n++; }));
+
+      const block = el("div", "rq");
+      const h = el("h3", "", q.title);
+      h.append(el("span", "sub", `${answered.length}人${q.multi ? "・複数回答" : ""}`));
+      block.append(h);
+
+      if (!answered.length) {
+        block.append(el("div", "legend", "まだ回答がありません"));
+      } else if (q.multi) {
+        // 人気順の横棒
+        const rank = el("div", "rank");
+        [...tally].sort((a, b) => b.n - a.n).forEach(({ opt, n }) => {
+          const track = el("span", "track2");
+          const fill = el("span", "fill");
+          fill.style.width = `${Math.round(n / answered.length * 100)}%`;
+          fill.style.display = "block";
+          track.append(fill);
+          rank.append(el("span", "label", opt), track, el("span", "num", `${n}人`));
+        });
+        block.append(rank);
+      } else {
+        // 1本の帯グラフ
+        const band = el("div", "band");
+        const legend = el("ul", "legend");
+        tally.forEach(({ opt, n }, i) => {
+          const pct = Math.round(n / answered.length * 100);
+          if (n > 0) {
+            const seg = el("span");
+            seg.style.width = (n / answered.length * 100) + "%";
+            seg.style.background = BAND_COLORS[i];
+            seg.title = `${opt} ${pct}%`;
+            band.append(seg);
+          }
+          const li = el("li");
+          const dot = el("i");
+          dot.style.background = BAND_COLORS[i];
+          li.append(dot, el("span", "", opt), el("span", "pct", `${pct}%`));
+          legend.append(li);
+        });
+        block.append(band, legend);
+      }
+      root.append(block);
+    }
+  }
+  renderResults();
+
+  // 保存先(Googleスプレッドシート)
+  // スプレッドシートの「ウェブアプリ」のURLをここに入れる
+  const SHEET_URL = "https://script.google.com/macros/s/AKfycbxm9hVaK_Kw_oWu4mMVuzFaaSTcBy544Ka7Az_xF42f_4q3tf6yFfJ51J5YHbsnY0l8/exec";
+  // リンクの末尾に ?kai=1010 のように付けると、その回の回答だけを集計する
+  const KAI = new URLSearchParams(location.search).get("kai") || "";
+
+  async function loadResults() {
+    try {
+      const url = SHEET_URL + (KAI ? "?kai=" + encodeURIComponent(KAI) : "");
+      const res = await fetch(url);
+      const data = await res.json();
+      responses = Array.isArray(data.responses) ? data.responses : [];
+      renderResults();
+    } catch {
+      // 読めなかったときは、前に表示した結果をそのまま残す
+    }
+  }
+  loadResults();
+  // 結果の画面を開いている間は、30秒ごとに新しい回答を読み直す
+  setInterval(() => { if (!views.results.hidden) loadResults(); }, 30000);
+  document.getElementById("tab-results").addEventListener("click", loadResults);
+
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const { ans, missing } = collect();
+    if (missing) {
+      err.textContent = `「${QUESTIONS[missing].title}」がまだ選ばれていません。`;
+      err.hidden = false;
+      form.querySelector(`[data-q="${missing}"]`).scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    submitBtn.disabled = true;
+    try {
+      const res = await fetch(SHEET_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ ...ans, kai: KAI }),
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error("not ok");
+      form.hidden = true;
+      document.getElementById("progress").hidden = true;
+      document.getElementById("thanks").hidden = false;
+      window.scrollTo({ top: 0 });
+      loadResults();
+    } catch {
+      err.textContent = "送信できませんでした。電波のよいところで、もう一度お試しください。";
+      err.hidden = false;
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+</script>
