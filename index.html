@@ -31,7 +31,7 @@
     background: var(--bg);
     color: var(--ink);
     font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif;
-    font-size: 15px;
+    font-size: 17px;
     line-height: 1.8;
     padding-inline: 16px;
     padding-block: 0;
@@ -57,19 +57,19 @@
 
   header { position: relative; display: flex; align-items: flex-end; gap: 12px; }
   .head-text { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
-  .eyebrow { font-size: 12px; letter-spacing: .1em; color: var(--muted); }
+  .eyebrow { font-size: 15px; letter-spacing: .08em; color: #5E6154; }
   h1 {
     font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
-    font-weight: 700; font-size: 24px; line-height: 1.6; margin: 0; text-wrap: balance;
+    font-weight: 700; font-size: 27px; line-height: 1.55; margin: 0; text-wrap: balance;
   }
   h1 .mark { background: linear-gradient(transparent 62%, var(--yellow) 62%); }
-  .lead { margin: 0; color: var(--muted); font-size: 13px; }
+  .lead { margin: 0; color: var(--muted); font-size: 15px; }
   .rin-head { width: 92px; flex-shrink: 0; }
 
   .tabs { display: flex; gap: 4px; background: var(--soft); padding: 4px; border-radius: 999px; }
   .tabs button {
     flex: 1; border: 0; background: transparent; color: var(--muted);
-    font: inherit; font-size: 14px; font-weight: 500; padding: 8px 12px; border-radius: 999px; cursor: pointer;
+    font: inherit; font-size: 16px; font-weight: 500; padding: 10px 12px; border-radius: 999px; cursor: pointer;
   }
   .tabs button[aria-selected="true"] { background: var(--bg); color: var(--ink); box-shadow: 0 0 0 1px var(--line); }
   .tabs button:focus-visible { outline: 2px solid var(--aqua); outline-offset: 2px; }
@@ -87,7 +87,7 @@
   }
   .rin-run.hop { animation: hop .5s ease; }
   @keyframes hop { 0%,100% { translate: 0 0; } 40% { translate: 0 -8px; } }
-  .progress-label { font-size: 12px; color: var(--muted); text-align: right; margin-top: 6px; font-variant-numeric: tabular-nums; }
+  .progress-label { font-size: 14px; color: var(--muted); text-align: right; margin-top: 6px; font-variant-numeric: tabular-nums; }
 
   form { display: flex; flex-direction: column; }
   fieldset {
@@ -99,26 +99,26 @@
   legend { padding: 0; display: contents; }
   .q {
     font-family: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", sans-serif;
-    font-weight: 700; font-size: 17px; line-height: 1.6; display: flex; gap: 10px; align-items: baseline;
+    font-weight: 700; font-size: 19px; line-height: 1.6; display: flex; gap: 10px; align-items: baseline;
   }
   .q .n {
-    flex-shrink: 0; font-size: 12px; font-weight: 700; color: var(--mint-ink);
+    flex-shrink: 0; font-size: 13px; font-weight: 700; color: var(--mint-ink);
     background: var(--mint); border-radius: 999px; padding: 0 9px; line-height: 1.9; font-variant-numeric: tabular-nums;
   }
-  .hint { font-size: 12px; color: var(--muted); margin-top: -6px; }
+  .hint { font-size: 14px; color: var(--muted); margin-top: -6px; }
 
   .choices { display: flex; flex-wrap: wrap; gap: 8px; }
   .choice { position: relative; }
   .choice input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
   .choice span {
-    display: inline-block; padding: 9px 16px; border: 1px solid var(--line); border-radius: 999px;
-    background: var(--bg); font-size: 14px; line-height: 1.5; transition: background .15s, border-color .15s;
+    display: inline-block; padding: 11px 18px; border: 1px solid var(--line); border-radius: 999px;
+    background: var(--bg); font-size: 16px; line-height: 1.5; transition: background .15s, border-color .15s;
   }
   .choice input:checked + span { background: var(--mint); border-color: var(--mint); color: var(--mint-ink); font-weight: 500; }
   .choice input:focus-visible + span { outline: 2px solid var(--aqua); outline-offset: 2px; }
 
   .skip-note {
-    display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--ink);
+    display: flex; align-items: center; gap: 12px; font-size: 15px; color: var(--ink);
     background: var(--soft); padding: 10px 14px; border-radius: 14px; margin: 0 0 8px;
   }
   .skip-note img { width: 64px; flex-shrink: 0; }
@@ -127,13 +127,13 @@
 
   .submit-row { display: flex; flex-direction: column; gap: 10px; padding-top: 8px; }
   .btn {
-    border: 0; border-radius: 999px; padding: 14px 20px; cursor: pointer;
-    background: var(--mint); color: var(--mint-ink); font: inherit; font-weight: 700; font-size: 15px;
+    border: 0; border-radius: 999px; padding: 16px 20px; cursor: pointer;
+    background: var(--mint); color: var(--mint-ink); font: inherit; font-weight: 700; font-size: 17px;
   }
   .btn:disabled { opacity: .5; cursor: default; }
   .btn:focus-visible { outline: 2px solid var(--aqua); outline-offset: 2px; }
   .btn.ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); }
-  .err { color: var(--danger); font-size: 13px; margin: 0; }
+  .err { color: var(--danger); font-size: 15px; margin: 0; }
 
   /* 送信ボタンの下のしめくくり */
   .closing { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 36px; text-align: center; }
@@ -141,7 +141,7 @@
   .closing .rin-box img { width: 120px; display: block; }
   .bubble {
     position: absolute; top: 4px; left: 100%; margin-left: -10px; white-space: nowrap;
-    background: #FBF9DA; color: var(--ink); font-family: "Kiwi Maru", "Zen Maru Gothic", sans-serif; font-size: 12px; font-weight: 400;
+    background: #FBF9DA; color: var(--ink); font-family: "Kiwi Maru", "Zen Maru Gothic", sans-serif; font-size: 13px; font-weight: 400;
     padding: 3px 12px; border-radius: 999px; transform-origin: 0 100%;
     animation: wiggle 2s ease-in-out infinite;
   }
@@ -154,40 +154,45 @@
   .thanks { display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center; padding-top: 8px; }
   .thanks img { width: 150px; animation: bounce 1.2s ease 1; }
   @keyframes bounce { 0% { transform: translateY(12px); opacity: 0; } 40% { transform: translateY(-10px); opacity: 1; } 70% { transform: translateY(2px); } 100% { transform: none; } }
-  .thanks h2 { font-family: "Zen Maru Gothic", sans-serif; font-size: 21px; margin: 0; }
-  .reveal { background: var(--soft); border-radius: 14px; padding: 14px 18px; font-size: 14px; margin: 0; text-align: left; }
+  .thanks h2 { font-family: "Zen Maru Gothic", sans-serif; font-size: 23px; margin: 0; }
+  .reveal { background: var(--soft); border-radius: 14px; padding: 14px 18px; font-size: 16px; margin: 0; text-align: left; }
   .reveal b { background: linear-gradient(transparent 60%, var(--yellow) 60%); font-weight: 700; }
   .thanks .btn { align-self: stretch; }
 
   .results { display: flex; flex-direction: column; gap: 30px; }
-  .count { font-size: 14px; color: var(--muted); }
+  .count { font-size: 16px; color: var(--muted); }
   .count b { font-size: 28px; color: var(--ink); font-family: "Zen Maru Gothic", sans-serif; margin-right: 4px; font-variant-numeric: tabular-nums; }
   .rq { display: flex; flex-direction: column; gap: 10px; }
-  .rq h3 { margin: 0; font-family: "Zen Maru Gothic", sans-serif; font-size: 15px; line-height: 1.6; }
-  .rq .sub { font-size: 12px; color: var(--muted); font-weight: 400; margin-left: 6px; font-family: "Noto Sans JP", sans-serif; }
+  .rq h3 { margin: 0; font-family: "Zen Maru Gothic", sans-serif; font-size: 17px; line-height: 1.6; }
+  .rq .sub { font-size: 14px; color: var(--muted); font-weight: 400; margin-left: 6px; font-family: "Noto Sans JP", sans-serif; }
 
   /* 帯グラフ */
   .band { display: flex; height: 18px; border-radius: 999px; overflow: hidden; background: var(--soft); }
   .band span { height: 100%; transition: width .5s ease; }
   .band span + span { box-shadow: -2px 0 0 var(--bg); }
-  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 0; padding: 0; list-style: none; font-size: 13px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 0; padding: 0; list-style: none; font-size: 15px; }
   .legend li { display: flex; align-items: center; gap: 6px; }
   .legend i { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
   .legend .pct { color: var(--muted); font-variant-numeric: tabular-nums; }
 
   /* 人気順の横棒(複数回答) */
-  .rank { display: grid; grid-template-columns: minmax(0, 10em) 1fr 4.2em; gap: 8px 10px; align-items: center; font-size: 13px; }
+  .rank { display: grid; grid-template-columns: minmax(0, 10em) 1fr 4.2em; gap: 8px 10px; align-items: center; font-size: 15px; }
   .rank .label { line-height: 1.4; overflow-wrap: anywhere; }
   .rank .track2 { height: 12px; background: var(--soft); border-radius: 999px; overflow: hidden; }
   .rank .fill { height: 100%; background: var(--mint); border-radius: 999px; transition: width .5s ease; }
   .rank .num { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
 
-  .empty { display: flex; flex-direction: column; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; text-align: center; padding-block: 12px; }
+  .empty { display: flex; flex-direction: column; align-items: center; gap: 10px; color: var(--muted); font-size: 16px; text-align: center; padding-block: 12px; }
   .empty img { width: 150px; }
 
   @media (max-width: 420px) {
-    h1 { font-size: 21px; }
-    .rin-head { width: 76px; }
+    h1 { font-size: 24px; }
+    /* スマホではタイトルを横いっぱいに使い、りんちゃんは説明文の横に置く */
+    header { display: grid; grid-template-columns: 1fr 76px; column-gap: 10px; row-gap: 8px; align-items: end; }
+    .head-text { display: contents; }
+    .eyebrow, h1 { grid-column: 1 / -1; }
+    .lead { grid-column: 1; }
+    .rin-head { width: 76px; grid-column: 2; grid-row: 3; }
     .rank { grid-template-columns: 1fr 4.2em; }
     .rank .label { grid-column: 1 / -1; margin-bottom: -4px; }
   }
