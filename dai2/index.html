@@ -214,14 +214,14 @@
     <svg class="deco twinkle" width="14" height="14" viewBox="0 0 24 24" style="right: 128px; top: 26px" aria-hidden="true"><path d="M12 0 14.5 9.5 24 12 14.5 14.5 12 24 9.5 14.5 0 12 9.5 9.5Z" fill="#F4EFA6"/></svg>
     <svg class="deco twinkle" width="11" height="11" viewBox="0 0 24 24" style="right: 4px; top: 4px; animation-delay: 1.4s" aria-hidden="true"><path d="M12 0 14.5 9.5 24 12 14.5 14.5 12 24 9.5 14.5 0 12 9.5 9.5Z" fill="#B3DDE0"/></svg>
     <div class="head-text">
-      <div class="eyebrow">ハンドメイド作家さんのための AI講座</div>
+      <div class="eyebrow">ハンドメイド作家さんのための AI活用</div>
       <h1><span class="mark">はじめに、ちょっとだけ</span><br>教えてください♪</h1>
-      <p class="lead">タップするだけで1〜2分ほどで終わります。お名前は聞きません。</p>
+      <p class="lead">タップするだけで1〜2分ほどで終わります。<br>お名前は聞きません。</p>
     </div>
     <img class="rin-head" src="rin_smile.gif" alt="にっこり笑うりんちゃん">
   </header>
 
-  <div class="tabs" role="tablist">
+  <div class="tabs" id="tabs" role="tablist" hidden>
     <button type="button" role="tab" id="tab-form" aria-selected="true">回答する</button>
     <button type="button" role="tab" id="tab-results" aria-selected="false">みんなの結果</button>
   </div>
@@ -328,10 +328,10 @@
   const QUESTIONS = {
     used: { title: "AIを使ったことがありますか?", options: ["はい", "まだない"] },
     tools: { title: "どのAIを使っていますか?", multi: true, options: ["ChatGPT", "Claude", "Gemini", "Copilot", "Grok", "Manus", "Claude Code", "Codex", "Canvaなどのツール内のAI", "画像生成AI", "動画生成AI", "その他"] },
-    uses: { title: "今、AIを何に活用していますか?", multi: true, options: ["お客様への返信", "Instagramの投稿文", "商品説明", "画像づくり", "会計や事務", "アイデア出し", "調べもの", "その他"] },
-    troubles: { title: "AIを使っていて(または使う前に)、困ったこと・不安なことは?", multi: true, options: ["何を頼めばいいか分からない", "どう頼めば思ったとおりになるか分からない", "出てきた文章が自分らしくなくて、直すのに時間がかかる", "使い続ける時間や余裕がない", "何に使えるのか、イメージできない", "どこから始めればいいか分からない", "お客様の情報などが心配", "特に困っていない"] },
-    redo: { title: "AIに頼んで「なんか違う」となったとき、どうしますか?", options: ["頼み方を変えて、やり直す", "自分で直す", "あきらめてしまう", "そういう経験はまだない"] },
-    wants: { title: "AIに手伝ってほしいことは?", multi: true, options: ["お客様への返信", "Instagramの投稿文", "商品説明", "画像づくり", "会計や事務", "アイデア出し", "調べもの", "その他"] },
+    uses: { title: "今、AIを何に活用していますか?", multi: true, options: ["文章づくり(返信文、Instagramのキャプション、商品説明など)", "画像づくり", "動画づくり", "ホームページ・サイトづくり", "アイデア出し", "相談・壁打ち", "調べもの・リサーチ", "要約・文字起こし", "翻訳", "会計や事務", "その他"] },
+    troubles: { title: "AIを使っていて(または使う前に)、困ったこと・不安なことは?", multi: true, options: ["何を頼めばいいか分からない", "どう頼めば思ったとおりの答えが返ってくるか分からない", "出てきた文章が自分らしくなくて、直すのに時間がかかる", "使い続ける時間や余裕がない", "何に使えるのか、イメージできない", "どこから始めればいいか分からない", "お客様や自分の情報が漏れないか心配", "特に困っていない"] },
+    redo: { title: "AIに頼んで「なんか違う」となったとき、どうしますか?", options: ["追加で指示を送って、直してもらう", "自分で直す", "あきらめてしまう", "そういう経験はまだない"] },
+    wants: { title: "AIに手伝ってほしいことは?", multi: true, options: ["文章づくり(返信文、Instagramのキャプション、商品説明など)", "画像づくり", "動画づくり", "ホームページ・サイトづくり", "アイデア出し", "相談・壁打ち", "調べもの・リサーチ", "要約・文字起こし", "翻訳", "会計や事務", "その他"] },
     nowtime: { title: "今、AIを1日にどのくらい使っていますか?", options: ["10分くらい", "30分くらい", "1時間くらい", "2時間以上"] },
     canTime: { title: "AIのために、1日にどのくらいまでなら時間を使えそうですか?", options: ["あまり取れない", "10分くらい", "30分くらい", "1時間くらい", "それ以上"] },
     learn: { title: "今後、積極的にAIを学びたいですか?", options: ["ぜひ学びたい", "少し興味がある", "興味はあまりないけど、学ばなきゃと思っている", "まだわからない"] },
@@ -412,6 +412,17 @@
     views.results.hidden = which !== "results";
     document.getElementById("tab-form").setAttribute("aria-selected", which === "form");
     document.getElementById("tab-results").setAttribute("aria-selected", which === "results");
+  }
+  // 回答する前は「みんなの結果」を見せない(みんなの答えに引っ張られないように)
+  // ・回答を送ったあと、または ?results=1 をつけて開いたときだけ表示する
+  const tabsBar = document.getElementById("tabs");
+  const DONE_KEY = "ai-survey-dai2-done";
+  let canSee = new URLSearchParams(location.search).get("results") === "1";
+  try { if (localStorage.getItem(DONE_KEY) === "1") canSee = true; } catch {}
+  tabsBar.hidden = !canSee;
+  function unlockResults() {
+    try { localStorage.setItem(DONE_KEY, "1"); } catch {}
+    tabsBar.hidden = false;
   }
   document.getElementById("tab-form").onclick = () => show("form");
   document.getElementById("tab-results").onclick = () => show("results");
@@ -540,6 +551,7 @@
       });
       const data = await res.json();
       if (!data.ok) throw new Error("not ok");
+      unlockResults();
       form.hidden = true;
       document.getElementById("progress").hidden = true;
       document.getElementById("thanks").hidden = false;
